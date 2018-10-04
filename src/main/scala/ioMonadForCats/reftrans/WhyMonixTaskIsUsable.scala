@@ -5,32 +5,43 @@ import monix.execution.Scheduler.Implicits.global
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
-
+import scala.util.{Random, Try}
 import scala.language.postfixOps
 
 /*
-  see: https://typelevel.org/blog/2017/05/02/io-monad-for-cats.html
+  see blogpost:
+  https://www.reddit.com/r/scala/comments/3zofjl/why_is_future_totally_unusable/
  */
-object RefTransMonixTask extends App {
+object WhyMonixTaskIsUsable extends App {
 
   println("\n-----")
 
-  val future = Task {println("processing async lazily ..."); 5}
-  val fSquared1: Task[Int] = for {
-    res1 <- future
-    res2 <- future
-  } yield res1 * res2
+  val task1 = {
+    val r = new Random(0L)
+    val x = Task.delay(r.nextInt)
+    for {
+      a <- x
+      b <- x
+    } yield (a, b)
+  }
 
-  println(Await.result(fSquared1.runAsync, 1 second))
+  // Same as task1, but I inlined `x`
+  val task2 = {
+    val r = new Random(0L)
+    for {
+      a <- Task.delay(r.nextInt)
+      b <- Task.delay(r.nextInt)
+    } yield (a, b)
+  }
 
-  println("-----")
+  val completionHandler: Try[(Int, Int)] => Unit = // impure, with side-effect
+    tryy => println(tryy)
 
-  val fSquared2: Task[Int] = for {
-    res1 <- Task {println("processing async lazily ..."); 5}
-    res2 <- Task {println("processing async lazily ..."); 5}
-  } yield res1 * res2
+  println(task1 runOnComplete completionHandler) // (-1155484576,-723955400)
+  println(task2 runOnComplete completionHandler) // (-1155484576,-723955400)
 
-  println(Await.result(fSquared2.runAsync, 1 second))
+  Await.ready(task1.runAsync, 1 second)
+  Await.ready(task2.runAsync, 1 second)
 
   println("-----\n")
 }

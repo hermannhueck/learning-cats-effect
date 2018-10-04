@@ -1,27 +1,42 @@
 package ioMonadForCats.reftrans
 
-import cats.effect.IO
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.Random
+import scala.language.postfixOps
 
 /*
-  see: https://typelevel.org/blog/2017/05/02/io-monad-for-cats.html
+  see blogpost:
+  https://www.reddit.com/r/scala/comments/3zofjl/why_is_future_totally_unusable/
  */
-object RefTrans2 extends App {
+object WhyFutureIsUnusable extends App {
 
   println("\n-----")
 
-  def putStrLn(line: String): IO[Unit] =
-    IO { println(line) }
+  val f1 = {
+    val r = new Random(0L)
+    val x = Future(r.nextInt)
+    for {
+      a <- x
+      b <- x
+    } yield (a, b)
+  }
 
-  def f(ioaction1: IO[Unit], ioaction2: IO[Unit]): IO[Unit] = for {
-    _ <- ioaction1
-    _ <- ioaction2
-  } yield ()
+  // Same as f1, but I inlined `x`
+  val f2 = {
+    val r = new Random(0L)
+    for {
+      a <- Future(r.nextInt)
+      b <- Future(r.nextInt)
+    } yield (a, b)
+  }
 
-  f(putStrLn("hi"), putStrLn("hi")).unsafeRunSync()
-  println("-----")
-  // isn't really equivalent to!
-  val x: IO[Unit] = putStrLn("hi")
-  f(x, x).unsafeRunSync()
+  f1.onComplete(println) // Success((-1155484576,-1155484576))
+  f2.onComplete(println) // Success((-1155484576,-723955400))    <-- not the same
+
+  Await.ready(f1, 1 second)
+  Await.ready(f2, 1 second)
 
   println("-----\n")
 }
