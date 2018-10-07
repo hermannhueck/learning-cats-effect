@@ -10,8 +10,8 @@ object MySimpleIO extends App {
   println("\n-----")
 
   val program = for {
-      _    <- IO { () => print("Welcome to Scala!  What's your name?   ") }
-      name <- IO { () => scala.io.StdIn.readLine }
+    _    <- IO { () => print("Welcome to Scala!  What's your name?   ") }
+    name <- IO { () => scala.io.StdIn.readLine }
     _    <- IO { () => println(s"Well hello, $name!") }
   } yield ()
 

@@ -1,4 +1,4 @@
-package ioMonadForCats.reftrans
+package ioMonadForCats.rt
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._

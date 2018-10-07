@@ -1,4 +1,4 @@
-package ioMonadForCats.reftrans
+package ioMonadForCats.rt
 
 import cats.effect.IO
 
@@ -12,9 +12,9 @@ object RefTrans2 extends App {
   def putStrLn(line: String): IO[Unit] =
     IO { println(line) }
 
-  def f(ioaction1: IO[Unit], ioaction2: IO[Unit]): IO[Unit] = for {
-    _ <- ioaction1
-    _ <- ioaction2
+  def f(ioa1: IO[Unit], ioa2: IO[Unit]): IO[Unit] = for {
+    _ <- ioa1
+    _ <- ioa2
   } yield ()
 
   f(putStrLn("hi"), putStrLn("hi")).unsafeRunSync()

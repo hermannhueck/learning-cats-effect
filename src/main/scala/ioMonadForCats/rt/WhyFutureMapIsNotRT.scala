@@ -1,4 +1,4 @@
-package ioMonadForCats.reftrans
+package ioMonadForCats.rt
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -26,7 +26,8 @@ object WhyFutureMapIsNotRT extends App {
 
   println(Await.result(Future.successful(1).map(f andThen g), 1 second))
 
-  println(Await.result(Future.successful(1).map(f).map(g), 1 second)) // throws TimoutException
+  println(Await.result(Future.successful(1).map(f).map(g), 1 second))
+  // throws TimoutException; the 2nd invocation of map doesn't call runnable.run()
 
   println("-----\n")
 }

@@ -1,4 +1,4 @@
-package ioMonadForCats.reftrans
+package ioMonadForCats.rt
 
 import monix.eval.Task
 import monix.execution.Scheduler.Implicits.global
