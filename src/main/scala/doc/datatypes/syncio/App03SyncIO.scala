@@ -14,6 +14,6 @@ object App03SyncIO extends App {
 
   iob.unsafeRunAsync(_ => ())
   // Hello world!
-  
+
   println("-----\n")
 }

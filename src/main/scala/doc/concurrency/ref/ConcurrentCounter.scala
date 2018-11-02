@@ -8,6 +8,16 @@ import scala.concurrent.ExecutionContext
 
 import scala.language.higherKinds
 
+/*
+  abstract class Ref[F[_], A] {
+    def get: F[A]
+    def set(a: A): F[Unit]
+    def modify[B](f: A => (A, B)): F[B]
+    // ... and more
+  }
+  Ref is ...
+  an asynchronous, concurrent mutable reference.
+ */
 object ConcurrentCounter extends App {
 
   println("\n-----")

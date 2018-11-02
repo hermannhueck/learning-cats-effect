@@ -17,7 +17,7 @@ object App14bParMapN extends App {
   val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
   val ec: ExecutionContext = ExecutionContext.fromExecutorService(scheduler)
   implicit val cs: ContextShift[IO] = IO.contextShift(ec)
-  implicit val timer: Timer[IO] = new MyTimer(ec, scheduler)
+  implicit val timer: Timer[IO] = IO.timer(ec, scheduler)
 
   val a = IO.raiseError[Unit](new Exception("boom")) <* IO(println("Running ioA"))
   val b = (IO.sleep(1.second) *> IO(println("Running ioB")))

@@ -5,6 +5,18 @@ import cats.effect.concurrent._
 
 import scala.concurrent.ExecutionContext
 
+/*
+  abstract class MVar[F[_], A] {
+    def put(a: A): F[Unit]
+    def take: F[A]
+    def read: F[A]
+
+    def tryPut(a: A): F[Boolean]
+    def tryTake: F[Option[A]]
+  }
+  MVar is ...
+  a mutable location that can be empty or contain a value, asynchronously blocking reads when empty and blocking writes when full.
+ */
 object ProducerConsumerChannel extends App {
 
   println("\n-----")

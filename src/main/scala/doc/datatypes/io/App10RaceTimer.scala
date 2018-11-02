@@ -2,10 +2,10 @@ package doc.datatypes.io
 
 import java.util.concurrent.{Executors, ScheduledExecutorService}
 
-import cats.effect.{Clock, ContextShift, IO, Timer}
+import cats.effect.{ContextShift, IO, Timer}
 
-import scala.concurrent.{CancellationException, ExecutionContext, ExecutionContextExecutor}
 import scala.concurrent.duration._
+import scala.concurrent.{CancellationException, ExecutionContext}
 import scala.language.postfixOps
 
 object App10RaceTimer extends App {
@@ -36,7 +36,7 @@ object App10RaceTimer extends App {
   val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
   val ec: ExecutionContext = ExecutionContext.fromExecutorService(scheduler)
   implicit val cs: ContextShift[IO] = IO.contextShift(ec)
-  implicit val timer: Timer[IO] = new MyTimer(ec, scheduler)
+  implicit val timer: Timer[IO] = IO.timer(ec, scheduler)
 
   val iob: IO[Unit] = timeout(ioa, 5 seconds)
 

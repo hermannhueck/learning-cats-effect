@@ -10,6 +10,17 @@ import scala.concurrent.duration._
 
 import scala.language.higherKinds
 
+/*
+  abstract class Ref[F[_], A] {
+    def available: F[Long]
+    def acquire: F[Unit]
+    def release: F[Unit]
+    // ... and more
+  }
+  A Semaphore has ...
+  a non-negative number of permits available. Acquiring a permit decrements the current number of permits and releasing a permit increases the current number of permits.
+  An acquire that occurs when there are no permits available results in semantic blocking until a permit becomes available.
+ */
 object SharedResource extends App {
 
   println("\n-----")

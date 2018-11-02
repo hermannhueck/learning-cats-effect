@@ -6,10 +6,11 @@ f ioaction1 ioaction2 = do
     ioaction1
     ioaction2
 
+main :: IO ()
 main = do
-  print "\n----- Referential Transparency"
+  putStrLn "----- Referential Transparency"
   f (putStrLn "hi") (putStrLn "hi")
-  print "-----"
+  putStrLn "-----"
   -- is equivalent to
   let x = putStrLn "hi" in f x x
-  print "-----\n"
+  putStrLn "-----"

@@ -32,7 +32,8 @@ object InfiniteIO2 extends App {
       _ <- infiniteIO(22)(csTwo)
     } yield ()
 
-  prog.unsafeRunSync() // inifinitely prints 1 and 2
+  prog.unsafeRunSync()
+  // inifinitely prints 1 and 2
 
   println("-----\n")
 }

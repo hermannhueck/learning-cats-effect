@@ -52,8 +52,8 @@ object JavaIOWithThreadShift extends App {
 
   val io: IO[Unit] = for {
     _ <- IO { print("Name, please: ") }
-    name <- IO { scala.io.StdIn.readLine }
     _ <- IO.shift(BlockingFileIO)
+    name <- IO { scala.io.StdIn.readLine }
     lines <- readLines("names.txt")
     _ <- IO.shift(Main)
     _ <- IO { println(getOutput(name, lines)) }

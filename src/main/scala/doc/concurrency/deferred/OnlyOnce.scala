@@ -6,6 +6,14 @@ import cats.implicits._
 
 import scala.concurrent.ExecutionContext
 
+/*
+  abstract class Deferred[F[_], A] {
+    def get: F[A]
+    def complete(a: A): F[Unit]
+  }
+  Deferred is ...
+  a purely functional synchronization primitive which represents a single value which may not yet be available.
+ */
 object OnlyOnce extends App {
 
   println("\n-----")

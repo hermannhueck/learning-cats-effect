@@ -28,7 +28,8 @@ object InfiniteIO1 extends App {
       _ <- infiniteIO(11)(csOne)
     } yield ()
 
-  prog.unsafeRunSync() // inifinitely prints 1
+  prog.unsafeRunSync()
+  // inifinitely prints 1
 
   println("-----\n")
 }
