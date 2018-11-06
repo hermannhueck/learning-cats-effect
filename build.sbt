@@ -17,7 +17,7 @@ scalacOptions ++= Seq(
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % "1.1.0-M1",
   // "org.typelevel" %% "cats-core" % "1.4.0",
-  "io.monix" %% "monix-eval" % "3.0.0-RC2",
+  "io.monix" %% "monix-eval" % "3.0.0-RC2"
 )
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
