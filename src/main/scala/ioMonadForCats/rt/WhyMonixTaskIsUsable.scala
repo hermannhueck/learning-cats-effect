@@ -34,14 +34,11 @@ object WhyMonixTaskIsUsable extends App {
     } yield (a, b)
   }
 
-  val completionHandler: Try[(Int, Int)] => Unit = // impure, with side-effect
-    tryy => println(tryy)
+  task1 runAsync println // (-1155484576,-723955400)
+  task2 runAsync println // (-1155484576,-723955400)
 
-  println(task1 runOnComplete completionHandler) // (-1155484576,-723955400)
-  println(task2 runOnComplete completionHandler) // (-1155484576,-723955400)
-
-  Await.ready(task1.runAsync, 1 second)
-  Await.ready(task2.runAsync, 1 second)
+  Await.ready(task1.runToFuture, 1 second)
+  Await.ready(task2.runToFuture, 1 second)
 
   println("-----\n")
 }

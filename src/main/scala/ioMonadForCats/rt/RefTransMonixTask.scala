@@ -15,22 +15,22 @@ object RefTransMonixTask extends App {
 
   println("\n-----")
 
-  val future = Task {println("processing async lazily ..."); 5}
-  val fSquared1: Task[Int] = for {
-    res1 <- future
-    res2 <- future
+  val task: Task[Int] = Task {println("processing async lazily ..."); 5}
+  val taskSquared1: Task[Int] = for {
+    res1 <- task
+    res2 <- task
   } yield res1 * res2
 
-  println(Await.result(fSquared1.runAsync, 1 second))
+  taskSquared1 runAsync println
 
   println("-----")
 
-  val fSquared2: Task[Int] = for {
+  val taskSquared2: Task[Int] = for {
     res1 <- Task {println("processing async lazily ..."); 5}
     res2 <- Task {println("processing async lazily ..."); 5}
   } yield res1 * res2
 
-  println(Await.result(fSquared2.runAsync, 1 second))
+  taskSquared2 runAsync println
 
   println("-----\n")
 }
