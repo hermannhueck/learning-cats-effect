@@ -32,7 +32,7 @@ object LiftIOApp extends App {
   println(either1)
 
 
-  val L = implicitly[LiftIO[MyEffect]]
+  val L: LiftIO[MyEffect] = implicitly[LiftIO[MyEffect]]
 
   val service1: MyEffect[Int] = Future.successful(Right(22))
   val service2: MyEffect[Boolean] = Future.successful(Right(true))

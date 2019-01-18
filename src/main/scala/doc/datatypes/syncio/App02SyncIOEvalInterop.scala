@@ -7,12 +7,12 @@ object App02SyncIO extends App {
 
   println("\n-----")
 
-  val eval = Eval.now("hey!")
+  val eval = Eval.now("Hey! Eval me!")
   // eval: cats.Eval[String] = Now(hey!)
 
   val str = SyncIO.eval(eval).unsafeRunSync
   println(str)
-  // hey!
+  // Hey! Eval me!
   
   println("-----\n")
 }

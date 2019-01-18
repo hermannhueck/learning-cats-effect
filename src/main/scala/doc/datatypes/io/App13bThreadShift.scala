@@ -1,25 +1,31 @@
 package doc.datatypes.io
 
+import java.util.concurrent.Executors
+
 import cats.effect.{ContextShift, IO}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 
-object App13bThreadShift extends App {
+object App13aThreadShift extends App {
 
   println("\n-----")
 
-  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
+  val cachedThreadPool = Executors.newCachedThreadPool()
+  val BlockingFileIO   = ExecutionContext.fromExecutor(cachedThreadPool)
+  implicit val Main: ExecutionContext = ExecutionContext.global
+  implicit val cs: ContextShift[IO] = IO.contextShift(Main)
 
-  lazy val doStuff = IO(println("stuff"))
-
-  lazy val repeat: IO[Unit] =
+  val ioa: IO[Unit] =
     for {
-      _ <- doStuff
-      _ <- IO.shift
-      _ <- repeat
+      _     <- IO(println("Enter your name: "))
+      _     <- IO.shift(BlockingFileIO)
+      name  <- IO(scala.io.StdIn.readLine())
+      _     <- IO.shift
+      _     <- IO(println(s"Welcome $name!"))
+      _     <- IO(cachedThreadPool.shutdown())
     } yield ()
 
-  repeat.unsafeRunSync()
+  ioa.unsafeRunSync()
 
   println("-----\n")
 }

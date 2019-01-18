@@ -35,7 +35,7 @@ object App08aCancelableIOTask extends App {
     }
   }
 
-  def readFile(file: File)(implicit ec: ExecutionContext): IO[String] =
+  def readFileAsync(file: File)(implicit ec: ExecutionContext): IO[String] =
 
     IO.async[String] { cb =>
 
@@ -51,7 +51,7 @@ object App08aCancelableIOTask extends App {
 
   implicit val ec: ExecutionContext = ExecutionContext.global
 
-  val ioa: IO[String] = readFile(new File("README.md"))
+  val ioa: IO[String] = readFileAsync(new File("README.md"))
 
   val program: IO[Unit] =
     for {

@@ -4,9 +4,9 @@ import java.util.concurrent.Executors
 
 import cats.effect.{ContextShift, IO}
 
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
+import scala.concurrent.ExecutionContext
 
-object App13aThreadShift extends App {
+object App13bThreadShift extends App {
 
   println("\n-----")
 

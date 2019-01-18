@@ -36,7 +36,7 @@ object App08bCancelableIOTask extends App {
     }
   }
 
-  def readFile(file: File)(implicit ec: ExecutionContext): IO[String] =
+  def readFileCancelable(file: File)(implicit ec: ExecutionContext): IO[String] =
 
     IO.cancelable[String] { cb =>
 
@@ -57,7 +57,7 @@ object App08bCancelableIOTask extends App {
 
   implicit val ec: ExecutionContext = ExecutionContext.global
 
-  val ioa: IO[String] = readFile(new File("README.md"))
+  val ioa: IO[String] = readFileCancelable(new File("README.md"))
 
   val program: IO[Unit] =
     for {
