@@ -3,7 +3,7 @@ package doc.datatypes.syncio
 import cats.Eval
 import cats.effect.SyncIO
 
-object App02SyncIO extends App {
+object App02SyncIOEvalInterop extends App {
 
   println("\n-----")
 

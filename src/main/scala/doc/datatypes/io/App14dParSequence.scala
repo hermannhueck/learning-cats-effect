@@ -14,10 +14,10 @@ object App14dParSequence extends App {
 
   val anIO = IO(1)
 
-  val aLotOfIOs = NonEmptyList.of(anIO, anIO)
+  val aLotOfIOs: NonEmptyList[IO[Int]] = NonEmptyList.of(anIO, anIO)
 
   // parSequence requires anm implicit ContextShift
-  val ioOfList = aLotOfIOs.parSequence
+  val ioOfList: IO[NonEmptyList[Int]] = aLotOfIOs.parSequence
 
   ioOfList.map(println).unsafeRunSync()
 

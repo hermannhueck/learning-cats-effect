@@ -7,7 +7,7 @@ import cats.syntax.apply._
 
 import scala.concurrent.ExecutionContext
 
-object App11dResource extends App {
+object App11dReadFileSynchronized extends App {
 
   println("\n-----")
 

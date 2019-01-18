@@ -2,7 +2,7 @@ package doc.typeclasses.sync
 
 import cats.effect.{IO, Sync}
 
-object SyncApp extends App {
+object App01Sync extends App {
 
   println("\n-----")
 

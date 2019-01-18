@@ -14,8 +14,8 @@ object BlockingThreads extends App {
   private val executorService: ExecutorService = Executors.newCachedThreadPool()
   val blockingEC: ExecutionContextExecutor = ExecutionContext.fromExecutor(executorService)
 
-  def blockingOp: IO[Unit] = IO(println("blocking op (executing on blockingEC)"))
-  def doSth(): IO[Unit] = IO(println("do something(executing on main thread pool)"))
+  def blockingOp: IO[Unit] = IO(println(s"blocking op (executing on blockingEC): ${Thread.currentThread.getName}"))
+  def doSth(): IO[Unit] = IO(println(s"do something(executing on main thread pool): ${Thread.currentThread.getName}"))
 
   val prog =
     for {

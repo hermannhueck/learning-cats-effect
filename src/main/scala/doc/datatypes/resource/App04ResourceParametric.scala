@@ -6,7 +6,7 @@ import cats.effect.{IO, Resource, Sync}
 
 import scala.language.higherKinds
 
-object App03Resource extends App {
+object App04ResourceParametric extends App {
 
   println("\n-----")
 

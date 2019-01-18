@@ -8,7 +8,7 @@ import cats.syntax.apply._
 
 import scala.concurrent.ExecutionContext
 
-object App11fResource extends App {
+object App11fReadFileBracketCase extends App {
 
   println("\n-----")
 

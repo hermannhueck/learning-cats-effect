@@ -4,7 +4,7 @@ import cats.effect.{IO, Resource}
 import cats.syntax.apply._
 import cats.syntax.functor._
 
-object App01Resource extends App {
+object App01ResourceOuterInner extends App {
 
   println("\n-----")
 

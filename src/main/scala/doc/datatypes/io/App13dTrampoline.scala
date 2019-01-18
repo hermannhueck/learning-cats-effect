@@ -4,7 +4,7 @@ import cats.effect.{ContextShift, IO}
 
 import scala.concurrent.ExecutionContext
 
-object App13cTrampoline extends App {
+object App13dTrampoline extends App {
 
   println("\n-----")
 

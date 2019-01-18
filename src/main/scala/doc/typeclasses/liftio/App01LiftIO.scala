@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.language.postfixOps
 
-object LiftIOApp extends App {
+object App01LiftIO extends App {
 
   println("\n-----")
 

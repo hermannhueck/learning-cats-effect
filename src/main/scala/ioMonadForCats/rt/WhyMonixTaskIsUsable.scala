@@ -1,11 +1,5 @@
 package ioMonadForCats.rt
 
-import monix.eval.Task
-import monix.execution.Scheduler.Implicits.global
-
-import scala.concurrent.Await
-import scala.concurrent.duration._
-import scala.util.{Random, Try}
 import scala.language.postfixOps
 
 /*
@@ -16,6 +10,7 @@ object WhyMonixTaskIsUsable extends App {
 
   println("\n-----")
 
+/*
   val task1 = {
     val r = new Random(0L)
     val x = Task.delay(r.nextInt)
@@ -39,6 +34,7 @@ object WhyMonixTaskIsUsable extends App {
 
   Await.ready(task1.runToFuture, 1 second)
   Await.ready(task2.runToFuture, 1 second)
+*/
 
   println("-----\n")
 }

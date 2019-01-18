@@ -1,19 +1,18 @@
 package ioMonadForCats.rt
 
-import scala.language.postfixOps
+import cats.effect.IO
 
 /*
   see blogpost:
   https://www.reddit.com/r/scala/comments/3zofjl/why_is_future_totally_unusable/
  */
-object WhyMonixTaskIsUsable extends App {
+object WhyIOIsUsable extends App {
 
   println("\n-----")
 
-/*
   val task1 = {
-    val r = new Random(0L)
-    val x = Task.delay(r.nextInt)
+    val r = new scala.util.Random(0L)
+    val x = IO.delay(r.nextInt)
     for {
       a <- x
       b <- x
@@ -22,19 +21,16 @@ object WhyMonixTaskIsUsable extends App {
 
   // Same as task1, but I inlined `x`
   val task2 = {
-    val r = new Random(0L)
+    val r = new scala.util.Random(0L)
     for {
-      a <- Task.delay(r.nextInt)
-      b <- Task.delay(r.nextInt)
+      a <- IO.delay(r.nextInt)
+      b <- IO.delay(r.nextInt)
     } yield (a, b)
   }
 
-  task1 runAsync println // (-1155484576,-723955400)
-  task2 runAsync println // (-1155484576,-723955400)
+  println(task1.unsafeRunSync()) // (-1155484576,-723955400)
+  println(task2.unsafeRunSync()) // (-1155484576,-723955400)
 
-  Await.ready(task1.runToFuture, 1 second)
-  Await.ready(task2.runToFuture, 1 second)
-*/
-
+  Thread sleep 200L
   println("-----\n")
 }

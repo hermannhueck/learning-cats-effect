@@ -45,11 +45,7 @@ object ConcurrentCounter extends App {
       w1  = new Worker[IO](1, ref)
       w2  = new Worker[IO](2, ref)
       w3  = new Worker[IO](3, ref)
-      _   <- List(
-        w1.start,
-        w2.start,
-        w3.start
-      ).parSequence.void
+      _   <- List(w1.start, w2.start, w3.start).parSequence.void
     } yield ()
 
   program.unsafeRunSync()

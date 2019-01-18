@@ -35,7 +35,6 @@ object App05dMyAsyncEffects extends App {
   ioa.unsafeRunAsync(callback)
 
   println("\nRunning sync ...")
-  // ioa.unsafeRunSync()
   ioa.map(println).unsafeRunSync()
 
   println("-----\n")

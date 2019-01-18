@@ -5,7 +5,7 @@ import cats.syntax.parallel._
 
 import scala.concurrent.ExecutionContext
 
-object App14aParallelism extends App {
+object App14aParMapN extends App {
 
   println("\n-----")
 

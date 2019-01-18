@@ -6,7 +6,7 @@ import cats.syntax.apply._
 import scala.concurrent.ExecutionContext
 import scala.language.postfixOps
 
-object App09dCancelBoundary extends App {
+object App09eCancelBoundary extends App {
 
   println("\n-----")
 

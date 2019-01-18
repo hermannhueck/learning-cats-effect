@@ -6,7 +6,7 @@ import cats.effect.{IO, Resource}
 
 import scala.collection.JavaConverters._
 
-object App02Resource extends App {
+object App03ResourceJavaIO extends App {
 
   println("\n-----")
 

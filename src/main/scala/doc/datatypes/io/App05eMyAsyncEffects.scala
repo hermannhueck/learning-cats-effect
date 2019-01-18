@@ -10,10 +10,10 @@ object App05eMyAsyncEffects extends App {
     def isEven: Boolean = num % 2 == 0
   }
 
-  type Result[A] = Either[Throwable, A]
-  type Callback[A] = Result[A] => Unit
+  type ErrorOr[A] = Either[Throwable, A]
+  type Callback[A] = ErrorOr[A] => Unit
 
-  def checkEven(num: Int): Result[Int] = {
+  def checkEven(num: Int): ErrorOr[Int] = {
 
     print(s"   Computing in thread: ${Thread.currentThread().getName} ...  ")
     Thread.sleep(3000L)
@@ -28,17 +28,16 @@ object App05eMyAsyncEffects extends App {
     cb(checkEven(10))
   }
 
-  val callback: Callback[Int] = {
-    case Left(throwable: Throwable) => println(throwable.toString)
-    case Right(num) => println(s"$num is even")
-  }
+  val callback: Callback[Int] = e => println(e match {
+    case Left(throwable: Throwable) => throwable.toString
+    case Right(num) => s"$num is even"
+  })
 
   println(s"Main: ${Thread.currentThread().getName}")
-  println("Running async:")
+  println("Running async ...")
   ioa.unsafeRunAsync(callback)
 
   println("\nRunning sync ...")
-  // ioa.unsafeRunSync()
   ioa.map(println).unsafeRunSync()
 
   println("-----\n")

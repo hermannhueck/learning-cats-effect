@@ -1,6 +1,6 @@
 package doc.datatypes.io
 
-import cats.effect.{CancelToken, IO, SyncIO, Timer}
+import cats.effect.{IO, SyncIO, Timer}
 import cats.syntax.apply._
 import cats.syntax.flatMap._
 
@@ -21,17 +21,12 @@ object App09cRunCancel extends App {
   val pureResult: SyncIO[IO[Unit]] = io.runCancelable { r =>
     IO(println(s"Done: $r"))
   }
+  // pureResult.unsafeRunSync()     //=> Done: Right(())
 
   // On evaluation, this will first execute the source, then it
   // will cancel it, because it makes perfect sense :-)
-  val cancel = pureResult.toIO.flatten
-
-  val token: SyncIO[CancelToken[IO]] = cancel.runCancelable((either: Either[Throwable, Unit]) => IO[Unit] { either match {
-    case Right(value) => println(value)
-    case Left(throwable) => println(throwable.toString)
-  }})
-
-  token.toIO.flatten.unsafeRunSync()
+  val cancel: IO[Unit] = pureResult.toIO.flatten
+  cancel.unsafeRunSync() // cancels the task and prints nothing
 
   println("-----\n")
 }

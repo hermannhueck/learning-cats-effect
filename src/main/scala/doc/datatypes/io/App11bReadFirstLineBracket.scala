@@ -6,7 +6,7 @@ import cats.effect.IO
 
 import scala.concurrent.ExecutionContext
 
-object App11bResource extends App {
+object App11bReadFirstLineBracket extends App {
 
   println("\n-----")
 

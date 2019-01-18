@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-object App09dUnancelable extends App {
+object App09dUncancelable extends App {
 
   println("\n-----")
 
@@ -19,9 +19,9 @@ object App09dUnancelable extends App {
   val io: IO[Unit] = IO.sleep(10 seconds) *> IO(println("Hello!"))
 
   // This IO can't be canceled, even if we try
-  io.uncancelable
+  val io2 = io.uncancelable
 
-  val pureResult: SyncIO[IO[Unit]] = io.runCancelable { r =>
+  val pureResult: SyncIO[IO[Unit]] = io2.runCancelable { r =>
     IO(println(s"Done: $r"))
   }
   // pureResult.unsafeRunSync()     //=> Done: Right(())

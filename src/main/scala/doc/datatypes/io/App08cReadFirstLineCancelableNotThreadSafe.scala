@@ -8,7 +8,7 @@ import cats.effect.IO
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
-object App08cReadFirstLineCancelable extends App {
+object App08cReadFirstLineCancelableNotThreadSafe extends App {
 
   println("\n-----")
 

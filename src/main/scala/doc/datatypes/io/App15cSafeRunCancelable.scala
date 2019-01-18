@@ -30,7 +30,6 @@ object App15cSafeRunCancelable extends App {
   // prints nothing
   // prints 1 if cancellation is not invoked
 
-  Thread.sleep(1000L)
-
+  Thread sleep 1000L
   println("-----\n")
 }

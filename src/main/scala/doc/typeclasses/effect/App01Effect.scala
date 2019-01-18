@@ -2,7 +2,7 @@ package doc.typeclasses.effect
 
 import cats.effect.{Effect, IO, SyncIO}
 
-object EffectApp extends App {
+object App01Effect extends App {
 
   println("\n-----")
 

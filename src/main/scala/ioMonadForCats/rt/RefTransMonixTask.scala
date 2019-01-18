@@ -1,11 +1,5 @@
 package ioMonadForCats.rt
 
-import monix.eval.Task
-import monix.execution.Scheduler.Implicits.global
-
-import scala.concurrent.Await
-import scala.concurrent.duration._
-
 import scala.language.postfixOps
 
 /*
@@ -15,6 +9,7 @@ object RefTransMonixTask extends App {
 
   println("\n-----")
 
+/*
   val task: Task[Int] = Task {println("processing async lazily ..."); 5}
   val taskSquared1: Task[Int] = for {
     res1 <- task
@@ -31,6 +26,7 @@ object RefTransMonixTask extends App {
   } yield res1 * res2
 
   taskSquared2 runAsync println
+*/
 
   println("-----\n")
 }

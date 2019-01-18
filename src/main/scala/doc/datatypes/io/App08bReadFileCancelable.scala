@@ -8,7 +8,7 @@ import cats.effect.IO
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
-object App08bCancelableIOTask extends App {
+object App08bReadFileCancelable extends App {
 
   println("\n-----")
 

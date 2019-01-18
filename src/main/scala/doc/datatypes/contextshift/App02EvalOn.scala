@@ -25,7 +25,7 @@ object App02EvalOn extends IOApp {
 
   def run(args: List[String]): IO[ExitCode] = {
 
-    val name = blockingThreadPool[IO].use { ec =>
+    val name: IO[String] = blockingThreadPool[IO].use { ec =>
       // Blocking operation, executed on special thread-pool
       contextShift.evalOn(ec)(readName[IO])
     }

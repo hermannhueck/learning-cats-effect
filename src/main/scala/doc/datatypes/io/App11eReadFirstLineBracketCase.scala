@@ -5,7 +5,7 @@ import java.io._
 import cats.effect.ExitCase.{Canceled, Completed, Error}
 import cats.effect.IO
 
-object App11eResource extends App {
+object App11eReadFirstLineBracketCase extends App {
 
   println("\n-----")
 

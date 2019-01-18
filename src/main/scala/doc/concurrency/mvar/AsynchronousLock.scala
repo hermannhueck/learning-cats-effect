@@ -34,8 +34,7 @@ object AsynchronousLock extends App {
   }
 
   object MLock {
-    def apply(): IO[MLock] =
-      MVar[IO].empty[Unit].map(ref => new MLock(ref))
+    def apply(): IO[MLock] = MVar[IO].empty[Unit].map(ref => new MLock(ref))
   }
 
   println("-----\n")

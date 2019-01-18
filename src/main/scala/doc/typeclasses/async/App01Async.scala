@@ -6,7 +6,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Success, Failure}
 
-object AsyncApp01 extends App {
+object App01Async extends App {
 
   println("\n-----")
 

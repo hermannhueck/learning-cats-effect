@@ -1,6 +1,6 @@
 package doc.datatypes.io
 
-import java.util.concurrent.{ExecutorService, Executors}
+import java.util.concurrent.{Executor, ExecutorService, Executors}
 
 import cats.effect.IO
 
@@ -10,11 +10,11 @@ object App05gFork extends App {
 
   println("\n-----")
 
-  def fork[A](body: => A)(implicit es: ExecutorService): IO[A] = {
+  def fork[A](thunk: => A)(implicit es: Executor): IO[A] = {
     IO async { cb =>
       es.execute(new Runnable {
         def run(): Unit =
-          try cb(Right(body)) catch { case NonFatal(t) => cb(Left(t)) }
+          try cb(Right(thunk)) catch { case NonFatal(t) => cb(Left(t)) }
       })
     }
   }
@@ -23,8 +23,8 @@ object App05gFork extends App {
     def isEven: Boolean = num % 2 == 0
   }
 
-  type Result[A] = Either[Throwable, A]
-  type Callback[A] = Result[A] => Unit
+  type ErrorOr[A] = Either[Throwable, A]
+  type Callback[A] = ErrorOr[A] => Unit
 
   def checkEven(num: Int): Int = {
 
@@ -47,7 +47,7 @@ object App05gFork extends App {
   val callback: Callback[Int] = result => println(result.fold(ex => ex.toString, num => s"$num is even"))
 
   println(s"Main: ${Thread.currentThread().getName}")
-  println("Running async:")
+  println("Running async ...")
   ioa.unsafeRunAsync(callback)
 
   // println("\nRunning sync ...")

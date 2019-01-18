@@ -1,6 +1,5 @@
 package doc.datatypes.io
 
-import cats.syntax.either._
 import cats.effect.IO
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -11,8 +10,9 @@ object App05cAsyncEffects extends App {
 
   def convert[A](fa: => Future[A])(implicit ec: ExecutionContext): IO[A] =
     IO.async { callback =>
-      fa.onComplete { t =>
-        callback(Either.fromTry(t)) }
+      fa.onComplete { tryy =>
+        callback(tryy.toEither)
+      }
     }
 
   implicit val ec: ExecutionContext = ExecutionContext.global

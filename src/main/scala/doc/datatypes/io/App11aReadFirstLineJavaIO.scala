@@ -4,7 +4,7 @@ import java.io._
 
 import scala.concurrent.ExecutionContext
 
-object App11aResource extends App {
+object App11aReadFirstLineJavaIO extends App {
 
   println("\n-----")
 

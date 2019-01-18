@@ -6,7 +6,7 @@ import cats.effect.{ContextShift, IO}
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 
-object App13aThreadShift extends App {
+object App13bThreadShift extends App {
 
   println("\n-----")
 

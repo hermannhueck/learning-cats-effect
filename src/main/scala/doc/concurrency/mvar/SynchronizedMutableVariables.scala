@@ -29,11 +29,17 @@ object SynchronizedMutableVariables extends App {
       case Nil => state.take
       case x :: xs =>
         state.take.flatMap { current =>
-          state.put(current + x).flatMap(_ => sum(state, xs))
+          // state.put(current + x).flatMap(_ => sum(state, xs))
+          state.put(current + x) >> sum(state, xs)
         }
     }
 
-  val prog = MVar.of[IO, Int](0).flatMap(sum(_, (0 until 100).toList))
+  //val prog = MVar.of[IO, Int](0).flatMap(sum(_, (0 until 100).toList))
+
+  val prog = for {
+    mvar <- MVar.of[IO, Int](0)
+    sum <- sum(mvar, (0 until 100).toList)
+  } yield sum
 
   prog.map(println).unsafeRunSync()
 

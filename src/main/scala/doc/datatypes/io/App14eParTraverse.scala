@@ -13,7 +13,7 @@ object App14eParTraverse extends App {
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
   // parTraverse requires anm implicit ContextShift
-  val results = NonEmptyList.of(1, 2, 3).parTraverse { i =>
+  val results: IO[NonEmptyList[Int]] = NonEmptyList.of(1, 2, 3).parTraverse { i =>
     IO(i)
   }
 

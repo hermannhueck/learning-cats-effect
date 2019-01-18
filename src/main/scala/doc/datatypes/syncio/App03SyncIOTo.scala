@@ -2,7 +2,7 @@ package doc.datatypes.syncio
 
 import cats.effect.{IO, SyncIO}
 
-object App03SyncIO extends App {
+object App03SyncIOTo extends App {
 
   println("\n-----")
 

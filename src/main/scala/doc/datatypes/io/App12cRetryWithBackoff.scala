@@ -1,17 +1,41 @@
 package doc.datatypes.io
 
-import cats.effect.IO
+import java.util.concurrent.{Executors, ScheduledExecutorService}
 
-object App12aRaiseError extends App {
+import cats.effect.{ContextShift, IO, Timer}
+import cats.syntax.apply._
+
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
+object App12cRetryWithBackoff extends App {
 
   println("\n-----")
 
-  val boom: IO[Nothing] = IO.raiseError(new Exception("boom"))
-  // boom: cats.effect.IO[Nothing] = IO(throw java.lang.Exception: boom)
+  def retryWithBackoff[A](ioa: IO[A], initialDelay: FiniteDuration, maxRetries: Int)(implicit timer: Timer[IO]): IO[A] =
+    ioa.handleErrorWith { error =>
+      if (maxRetries > 0)
+        IO.sleep(initialDelay) *> retryWithBackoff(ioa, initialDelay * 2, maxRetries - 1)
+      else
+        IO.raiseError(error)
+    }
 
-  boom.unsafeRunSync()
-  // java.lang.Exception: boom
-  //   ... 43 elided
+  val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
+  val ec: ExecutionContext = ExecutionContext.fromExecutorService(scheduler)
+  implicit val cs: ContextShift[IO] = IO.contextShift(ec)
+  implicit val timer: Timer[IO] = IO.timer(ec, scheduler)
+
+  val ioa = IO {
+    println("Retrying ...!")
+    throw new RuntimeException("boom")
+  }
+
+  try {
+    retryWithBackoff(ioa, 1 second, 4).unsafeRunSync()
+  } finally {
+    scheduler.shutdown()
+  }
 
   println("-----\n")
 }

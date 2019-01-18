@@ -24,7 +24,6 @@ object App15bSafeRunAsync extends App {
   start.unsafeRunSync
   // 1
 
-  Thread.sleep(1000L)
-
+  Thread sleep 1000L
   println("-----\n")
 }

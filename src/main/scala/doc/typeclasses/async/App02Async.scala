@@ -5,7 +5,7 @@ import cats.effect.{Async, IO}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object AsyncApp02 extends App {
+object App02Async extends App {
 
   println("\n-----")
 
