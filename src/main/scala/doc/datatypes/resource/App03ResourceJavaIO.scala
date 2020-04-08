@@ -4,7 +4,8 @@ import java.io.{BufferedReader, File, FileReader}
 
 import cats.effect.{IO, Resource}
 
-import scala.collection.JavaConverters._
+// import scala.collection.JavaConverters._ // deprecated since 2.13.0
+import scala.jdk.CollectionConverters._
 
 object App03ResourceJavaIO extends App {
 
@@ -25,7 +26,7 @@ object App03ResourceJavaIO extends App {
 
   val ioa: IO[Unit] = for {
     lines <- readLinesFromFile(new File("README.md"))
-    _ <- IO { lines foreach println }
+    _     <- IO { lines foreach println }
   } yield ()
 
   ioa.unsafeRunSync()
