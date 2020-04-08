@@ -45,7 +45,7 @@ object SharedResource extends App {
       } yield ()
   }
 
-  implicit val par: Parallel[IO, IO] = Parallel[IO, IO.Par].asInstanceOf[Parallel[IO, IO]]
+  implicit val par: Parallel[IO] = Parallel[IO, IO.Par].asInstanceOf[Parallel[IO]]
 
   val program: IO[Unit] =
     for {
