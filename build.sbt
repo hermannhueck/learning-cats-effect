@@ -15,10 +15,25 @@ scalacOptions ++= Seq(
   //"-Xfatal-warnings",        // turn compiler warnings into errors
 )
 
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-effect" % "2.1.2" withSources () withJavadoc ()
-)
+lazy val catsEffectVersion       = "2.1.3"
+lazy val silencerVersion         = "1.6.0"
+lazy val kindProjectorVersion    = "0.11.0"
+lazy val betterMonadicForVersion = "0.3.1"
 
-addCompilerPlugin(
-  "org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full
+libraryDependencies ++= Seq(
+  "org.typelevel"   %% "cats-effect" % catsEffectVersion,
+  "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
+  // https://github.com/ghik/silencer
+  "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
+  compilerPlugin(
+    "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full
+  ),
+  // https://github.com/typelevel/kind-projector
+  compilerPlugin(
+    compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorVersion cross CrossVersion.full)
+  ),
+  // https://github.com/oleg-py/better-monadic-for
+  compilerPlugin(
+    compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
+  )
 )
