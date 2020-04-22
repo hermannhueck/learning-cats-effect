@@ -14,22 +14,20 @@ object App14cParMapN extends App {
   println("\n-----")
 
   val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
-  val ec: ExecutionContext = ExecutionContext.fromExecutorService(scheduler)
-  implicit val cs: ContextShift[IO] = IO.contextShift(ec)
-  implicit val timer: Timer[IO] = IO.timer(ec, scheduler)
+  val ec: ExecutionContext                = ExecutionContext.fromExecutorService(scheduler)
+  implicit val cs: ContextShift[IO]       = IO.contextShift(ec)
+  implicit val timer: Timer[IO]           = IO.timer(ec, scheduler)
 
   val ioA = IO.sleep(10.seconds) *> IO(println("Delayed!"))
   val ioB = IO.raiseError[Unit](new Exception("dummy"))
 
   val program = (ioA, ioB).parMapN { (_, _) => () }
 
-  try
-    program.unsafeRunSync()
-  finally
-    scheduler.shutdown()
-  //=> Running ioB
-  //=> Running ioC
-  //=> Running ioA
+  try program.unsafeRunSync()
+  finally scheduler.shutdown()
+
+  //=> java.lang.Exception: dummy
+  //=> ... stack trace elided ...
 
   println("-----\n")
 }

@@ -11,16 +11,15 @@ object App02EvalOn extends IOApp {
 
   def blockingThreadPool[F[_]](implicit F: Sync[F]): Resource[F, ExecutionContext] =
     Resource(F.delay {
-        val executor: ExecutorService = Executors.newCachedThreadPool()
-        val ec: ExecutionContext = ExecutionContext.fromExecutor(executor)
-        (ec, F.delay(executor.shutdown()))
-      }
-    )
+      val executor: ExecutorService = Executors.newCachedThreadPool()
+      val ec: ExecutionContext      = ExecutionContext.fromExecutor(executor)
+      (ec, F.delay(executor.shutdown()))
+    })
 
   def readName[F[_]](implicit F: Sync[F]): F[String] =
     F.delay {
       print("Enter your name: ")
-      scala.io.StdIn.readLine()
+      scala.io.StdIn.readLine().trim
     }
 
   def run(args: List[String]): IO[ExitCode] = {
@@ -33,7 +32,7 @@ object App02EvalOn extends IOApp {
     for {
       _ <- IO(println("\n-----"))
       n <- name
-      _ <- IO(println(s"Hello, $n!"))
+      _ <- IO(println(s"\nHello, $n!"))
       _ <- IO(println("-----\n"))
     } yield ExitCode.Success
   }

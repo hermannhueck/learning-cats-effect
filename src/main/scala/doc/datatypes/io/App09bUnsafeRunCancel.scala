@@ -25,14 +25,19 @@ object App09bUnsafeRunCancel extends App {
 
   cancel.unsafeRunSync()
 
-/*
-  val token: CancelToken[IO] = cancel.unsafeRunCancelable((either: Either[Throwable, Unit]) => IO[Unit] { either match {
-    case Right(value) => println(value)
-    case Left(throwable) => println(throwable.toString)
-  }})
+  println("-----")
+
+  val token: CancelToken[IO] =
+    cancel.unsafeRunCancelable((either: Either[Throwable, Unit]) =>
+      IO[Unit] {
+        either match {
+          case Right(value)    => println(value)
+          case Left(throwable) => println(throwable.toString)
+        }
+      }
+    )
 
   token.unsafeRunSync()
-*/
 
   println("-----\n")
 }

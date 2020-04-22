@@ -7,7 +7,7 @@ import cats.effect.{IO, Resource}
 // import scala.collection.JavaConverters._ // deprecated since 2.13.0
 import scala.jdk.CollectionConverters._
 
-object App03ResourceJavaIO extends App {
+object App03aResourceJavaIO extends App {
 
   println("\n-----")
 
