@@ -21,8 +21,7 @@ lazy val kindProjectorVersion    = "0.11.0"
 lazy val betterMonadicForVersion = "0.3.1"
 
 libraryDependencies ++= Seq(
-  "org.typelevel"   %% "cats-effect" % catsEffectVersion,
-  "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
+  "org.typelevel" %% "cats-effect" % catsEffectVersion,
   // https://github.com/ghik/silencer
   "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
   compilerPlugin(
