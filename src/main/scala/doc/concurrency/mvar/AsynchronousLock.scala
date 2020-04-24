@@ -2,7 +2,8 @@ package doc.concurrency.mvar
 
 import cats.effect._
 import cats.effect.concurrent._
-import cats.syntax.all._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
 
 import scala.concurrent.ExecutionContext
 
@@ -34,8 +35,14 @@ object AsynchronousLock extends App {
   }
 
   object MLock {
-    def apply(): IO[MLock] = MVar[IO].empty[Unit].map(ref => new MLock(ref))
+    def apply(): IO[MLock] = MVar[IO].of(()).map(ref => new MLock(ref))
   }
+
+  (for {
+    lock  <- MLock.apply()
+    green <- lock.greenLight(IO("Green Light"))
+    _     <- IO(println(green))
+  } yield ()).unsafeRunSync()
 
   println("-----\n")
 }

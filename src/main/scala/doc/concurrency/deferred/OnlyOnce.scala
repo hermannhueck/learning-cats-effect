@@ -2,7 +2,12 @@ package doc.concurrency.deferred
 
 import cats.effect.{ContextShift, IO}
 import cats.effect.concurrent.Deferred
-import cats.implicits._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+import cats.syntax.parallel._
+import cats.syntax.show._
+import cats.instances.list._
+import cats.instances.int._
 
 import scala.concurrent.ExecutionContext
 

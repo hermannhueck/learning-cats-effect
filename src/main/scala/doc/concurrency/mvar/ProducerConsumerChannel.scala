@@ -1,9 +1,10 @@
 package doc.concurrency.mvar
 
-import cats.effect._
-import cats.effect.concurrent._
+import cats.effect.IO
+import cats.effect.concurrent.MVar
 
 import scala.concurrent.ExecutionContext
+import cats.effect.ContextShift
 
 /*
   abstract class MVar[F[_], A] {
@@ -44,8 +45,8 @@ object ProducerConsumerChannel extends App {
     }
 
   val prog = for {
-    channel <- MVar[IO].empty[Option[Int]]
-    count = 100000
+    channel      <- MVar[IO].empty[Option[Int]]
+    count        = 100000
     producerTask = producer(channel, (0 until count).toList)
     consumerTask = consumer(channel, 0L)
 

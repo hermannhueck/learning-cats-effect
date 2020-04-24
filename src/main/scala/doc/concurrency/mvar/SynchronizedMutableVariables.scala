@@ -2,7 +2,7 @@ package doc.concurrency.mvar
 
 import cats.effect._
 import cats.effect.concurrent._
-import cats.syntax.all._
+import cats.syntax.flatMap._
 
 import scala.concurrent.ExecutionContext
 
@@ -38,7 +38,7 @@ object SynchronizedMutableVariables extends App {
 
   val prog = for {
     mvar <- MVar.of[IO, Int](0)
-    sum <- sum(mvar, (0 until 100).toList)
+    sum  <- sum(mvar, (0 until 100).toList)
   } yield sum
 
   prog.map(println).unsafeRunSync()

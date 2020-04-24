@@ -2,7 +2,12 @@ package doc.concurrency.ref
 
 import cats.effect.{ContextShift, IO, Sync}
 import cats.effect.concurrent.Ref
-import cats.implicits._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+import cats.syntax.parallel._
+import cats.instances.list._
+import cats.instances.int._
+import cats.syntax.show._
 
 import scala.concurrent.ExecutionContext
 
@@ -25,9 +30,9 @@ object ConcurrentCounter extends App {
   // Needed for triggering evaluation in parallel
   implicit val ctx: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
-  class Worker[F[_]](number: Int, ref: Ref[F, Int])(implicit F: Sync[F]) {
+  class Worker[F[_]: Sync](number: Int, ref: Ref[F, Int]) {
 
-    private def putStrLn(value: String): F[Unit] = F.delay(println(value))
+    private def putStrLn(value: String): F[Unit] = Sync[F].delay(println(value))
 
     def start: F[Unit] =
       for {
