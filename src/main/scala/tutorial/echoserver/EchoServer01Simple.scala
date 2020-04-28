@@ -7,8 +7,6 @@ import cats.implicits._
 import java.io._
 import java.net._
 
-import scala.language.higherKinds
-
 /*
   See tutorial and solutions at:
   https://typelevel.org/cats-effect/tutorial/tutorial.html#tcp-echo-server---concurrent-system-with-fibers
@@ -20,24 +18,27 @@ object EchoServer01Simple extends IOApp {
 
   def echoProtocol[F[_]: Sync](clientSocket: Socket): F[Unit] = {
 
-    def loop(reader: BufferedReader, writer: BufferedWriter): F[Unit] = for {
-      line <- Sync[F].delay(reader.readLine())
-      _    <- line match {
-        case "" => Sync[F].unit // Empty line, we are done
-        case _  => Sync[F].delay{ writer.write(line); writer.newLine(); writer.flush() } >> loop(reader, writer)
-      }
-    } yield ()
+    def loop(reader: BufferedReader, writer: BufferedWriter): F[Unit] =
+      for {
+        line <- Sync[F].delay(reader.readLine())
+        _ <- line match {
+              case "" => Sync[F].unit // Empty line, we are done
+              case _ =>
+                Sync[F].delay { println(s"GOT: $line"); writer.write(line); writer.newLine(); writer.flush() } >>
+                  loop(reader, writer)
+            }
+      } yield ()
 
     def reader(clientSocket: Socket): Resource[F, BufferedReader] =
       Resource.make {
-        Sync[F].delay( new BufferedReader(new InputStreamReader(clientSocket.getInputStream)) )
+        Sync[F].delay(new BufferedReader(new InputStreamReader(clientSocket.getInputStream)))
       } { reader =>
         Sync[F].delay(reader.close()).handleErrorWith(_ => Sync[F].delay(println("Failed to close BufferedReader")))
       }
 
     def writer(clientSocket: Socket): Resource[F, BufferedWriter] =
       Resource.make {
-        Sync[F].delay( new BufferedWriter(new PrintWriter(clientSocket.getOutputStream)) )
+        Sync[F].delay(new BufferedWriter(new PrintWriter(clientSocket.getOutputStream)))
       } { writer =>
         Sync[F].delay(writer.close()).handleErrorWith(_ => Sync[F].delay(println("Failed to close BufferedWriter")))
       }
@@ -48,8 +49,9 @@ object EchoServer01Simple extends IOApp {
         writer <- writer(clientSocket)
       } yield (reader, writer)
 
-    readerWriter(clientSocket).use { case (reader, writer) =>
-      loop(reader, writer) // Let's get to work
+    readerWriter(clientSocket).use {
+      case (reader, writer) =>
+        loop(reader, writer) // Let's get to work
     }
   }
 
@@ -59,19 +61,22 @@ object EchoServer01Simple extends IOApp {
       Sync[F].delay(socket.close()).handleErrorWith(_ => Sync[F].delay(println("Failed to close socket")))
 
     def startEchoFiber(socket: Socket): F[Fiber[F, Unit]] =
-          echoProtocol(socket)
-            .guarantee(close(socket)) // Ensuring socket is closed
-            .start
+      echoProtocol(socket)
+        .guarantee(close(socket)) // Ensuring socket is closed
+        .start
 
     for {
-      _ <- Sync[F].delay(serverSocket.accept())
-        .bracketCase { socket =>
-          startEchoFiber(socket)                                    // Will run in its own Fiber!
-        } { (socket, exit) => exit match {
-          case Completed => Sync[F].unit
-          case Error(_) | Canceled => close(socket)
-        }}
-      _ <- serve(serverSocket)                  // Looping back to the beginning
+      _ <- Sync[F]
+            .delay(serverSocket.accept())
+            .bracketCase { socket =>
+              startEchoFiber(socket) // Will run in its own Fiber!
+            } { (socket, exit) =>
+              exit match {
+                case Completed           => Sync[F].unit
+                case Error(_) | Canceled => close(socket)
+              }
+            }
+      _ <- serve(serverSocket) // Looping back to the beginning
     } yield ()
   }
 
@@ -80,13 +85,9 @@ object EchoServer01Simple extends IOApp {
     def close[F[_]: Sync](socket: ServerSocket): F[Unit] =
       Sync[F].delay(socket.close()).handleErrorWith(_ => Sync[F].delay(println("Failed to close server socket")))
 
-    IO( new ServerSocket(args.headOption.map(_.toInt).getOrElse(5432)) )
-      .bracket {
-        serverSocket => serve[IO](serverSocket) >> IO.pure(ExitCode.Success)
-      } {
-        serverSocket => close[IO](serverSocket) >> IO(println("Server finished"))
+    IO(new ServerSocket(args.headOption.map(_.toInt).getOrElse(5432)))
+      .bracket { serverSocket => serve[IO](serverSocket) >> IO.pure(ExitCode.Success) } { serverSocket =>
+        close[IO](serverSocket) >> IO(println("Server finished\n-----\n"))
       }
   }
-
-  println("-----\n")
 }

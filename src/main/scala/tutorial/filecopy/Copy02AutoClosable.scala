@@ -22,7 +22,7 @@ object Copy02AutoClosable extends App {
   def runFileCopy(args: List[String]): IO[String] = args match {
 
     case input :: output :: rest =>
-      val origin = new File(input)
+      val origin      = new File(input)
       val destination = new File(output)
       if (!origin.exists())
         IO.raiseError[String](new FileNotFoundException(s"Input file doesn't exist: ${origin.getPath}"))
@@ -40,17 +40,11 @@ object Copy02AutoClosable extends App {
   def copy(origin: File, destination: File): IO[Long] =
     inputOutputStreams(origin, destination).use { case (in, out) => transfer(in, out) }
 
-  def inputOutputStreams(in: File, out: File): Resource[IO, (InputStream, OutputStream)] =
-    for {
-      inStream <- inputStream(in)
-      outStream <- outputStream(out)
-    } yield (inStream, outStream)
-
   def transfer(origin: InputStream, destination: OutputStream): IO[Long] = IO {
     // transfer in classic Java manner (to be changed later)
-    var total = 0L
+    var total               = 0L
     val buffer: Array[Byte] = new Array[Byte](1024 * 10)
-    var amount = origin.read(buffer)
+    var amount              = origin.read(buffer)
     while (amount > 0) {
       destination.write(buffer, 0, amount)
       total += amount
@@ -58,6 +52,12 @@ object Copy02AutoClosable extends App {
     }
     total
   }
+
+  def inputOutputStreams(in: File, out: File): Resource[IO, (InputStream, OutputStream)] =
+    for {
+      inStream  <- inputStream(in)
+      outStream <- outputStream(out)
+    } yield (inStream, outStream)
 
   def inputStream(f: File): Resource[IO, FileInputStream] =
     Resource.fromAutoCloseable(IO(new FileInputStream(f)))
