@@ -7,7 +7,7 @@ object RefTrans extends App {
 
   println("\n-----")
 
-  @com.github.ghik.silencer.silent("a pure expression does nothing in statement position")
+  @scala.annotation.nowarn("cat=other-pure-statement&msg=a pure expression does nothing in statement position")
   def f(ioa1: Unit, ioa2: Unit): Unit = {
     ioa1
     ioa2
