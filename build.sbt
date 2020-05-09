@@ -49,7 +49,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "root",
     description := "root project",
-    Compile / console / scalacOptions --= scalcOptionsToRemoveForConsole
+    Compile / console / scalacOptions --= scalcOptionsToRemoveForConsole,
+    sourceDirectories := Seq.empty
   )
 
 lazy val core = (project in file("core"))
