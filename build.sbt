@@ -1,32 +1,78 @@
-name := "learning-cats-effect"
+import Dependencies._
+import ScalacOptions._
 
-version := "0.1.0"
+val projectName        = "learning-cats-effect"
+val projectDescription = "Learning functional IO using cats-effect"
+val projectVersion     = "0.1.0"
 
-scalaVersion := "2.13.2"
+val scala213 = "2.13.2"
 
-scalacOptions ++= Seq(
-  "-encoding",
-  "UTF-8",        // source files are in UTF-8
-  "-deprecation", // warn about use of deprecated APIs
-  "-unchecked",   // warn about unchecked type parameters
-  "-feature",     // warn about misused language features
-  "-Wconf:any:warning-verbose"
-  //"-Xlint",                 // enable handy linter warnings
-  //"-Xfatal-warnings",        // turn compiler warnings into errors
-)
-
-lazy val catsEffectVersion       = "2.1.3"
-lazy val kindProjectorVersion    = "0.11.0"
-lazy val betterMonadicForVersion = "0.3.1"
-
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-effect" % catsEffectVersion,
-  // https://github.com/typelevel/kind-projector
-  compilerPlugin(
-    compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorVersion cross CrossVersion.full)
-  ),
-  // https://github.com/oleg-py/better-monadic-for
-  compilerPlugin(
-    compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
+inThisBuild(
+  Seq(
+    version := projectVersion,
+    scalaVersion := scala213,
+    publish / skip := true,
+    scalacOptions ++= defaultScalacOptions,
+    semanticdbEnabled := true,
+    semanticdbVersion := "4.3.10", // scalafixSemanticdb.revision,
+    scalafixDependencies ++= Seq("com.github.liancheng" %% "organize-imports" % "0.3.0"),
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+      "org.scala-lang" % "scala-reflect"  % scalaVersion.value,
+      shapeless,
+      fs2Core,
+      munit,
+      kindProjectorPlugin,
+      betterMonadicForPlugin
+    ) ++ Seq(
+      scalaCheck
+    ).map(_ % Test),
+    Test / parallelExecution := false,
+    // run 100 tests for each property // -s = -minSuccessfulTests
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-s", "100"),
+    testFrameworks += new TestFramework("munit.Framework"),
+    initialCommands :=
+      s"""|
+          |import scala.util.chaining._
+          |import fs2._, cats.effect._, cats.effect.implicits._, cats.implicits._
+          |import scala.concurrent.ExecutionContext.Implicits.global
+          |import scala.concurrent.duration._
+          |implicit val contextShiftIO: ContextShift[IO] = IO.contextShift(global)
+          |implicit val timerIO: Timer[IO] = IO.timer(global)
+          |println
+          |""".stripMargin // initialize REPL
   )
 )
+
+lazy val root = (project in file("."))
+  .aggregate(core)
+  .settings(
+    name := "root",
+    description := "root project",
+    Compile / console / scalacOptions --= scalcOptionsToRemoveForConsole
+  )
+
+lazy val core = (project in file("core"))
+  .dependsOn(hutil)
+  .settings(
+    name := projectName,
+    description := projectDescription,
+    Compile / console / scalacOptions --= scalcOptionsToRemoveForConsole,
+    libraryDependencies ++= Seq(
+      fs2Io,
+      fs2ReactiveStreams,
+      monixEval
+    )
+  )
+
+lazy val hutil = (project in file("hutil"))
+  .settings(
+    name := "hutil",
+    description := "Hermann's Utilities",
+    Compile / console / scalacOptions --= scalcOptionsToRemoveForConsole
+  )
+
+// GraphBuddy support
+// resolvers += Resolver.bintrayRepo("virtuslab", "graphbuddy")
+// addCompilerPlugin("com.virtuslab.semanticgraphs" % "scalac-plugin" % "0.0.10" cross CrossVersion.full)
+// scalacOptions += "-Yrangepos"
